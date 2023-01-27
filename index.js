@@ -1,71 +1,79 @@
 const process = require('process');
+const { parseArgs } = require('./parse-args.js');
 
-// console.log(process.argv)
-let arg = null
-let cost = null
-let payment = null
+// console.log('argv', process.argv);
 
-// provides cost and payment
-while((arg = process.argv.shift()) != null) {
-  if(arg === '--item-cost') {
-    const costInput = process.argv.shift()
-    cost = Math.floor(Number(costInput || '0') * 100)
-  } else if (arg === '--payment') {
-    const paymentInput = process.argv.shift()
-    payment = Math.floor(Number(paymentInput || '0') * 100)
+const { itemCost, payment } = parseArgs(process.argv);
+
+const vendingMachine = (itemCost, payment) => {
+
+  // remove decimals from item and money for easier calculation
+  let change = payment * 100 - itemCost * 100;
+
+  // create object to hold coin amounts
+  let coins = { quarters: 0, dimes: 0, nickels: 0, pennies: 0 };
+
+  // check for valid input
+  if (isNaN(itemCost)) {
+    console.log('--item-cost must be a number');
+    process.exit(1);
   }
-}
 
-console.error('--item-cost', cost)
-console.error('--payment', payment)
+  if (itemCost == null) {
+    console.error('--item-cost must be entered');
+    process.exit(1);
+  }
 
-if (payment !== null && cost !== null) {
-  let quarter = 0;
-  let dime = 0;
-  let nickel = 0;
-  let penny = 0;
+  if (isNaN(payment)) {
+    console.log('--payment must be a number');
+    process.exit(1);
+  }
 
-  let change = Math.floor(Number(payment - cost));
+  if (payment == null) {
+    console.error('--payment must be entered');
+    process.exit(1);
+  }
+
+  // check if payment is sufficient
+  if (itemCost > payment) {
+    console.log('--payment amount is insufficient for item');
+    process.exit(1);
+  }
   
-  while (change >= 25) {
-    change -= 25;
-    quarter++;
+  // total the amount of change due
+  console.log('');
+  console.log('Total change dispensed: ');
+  console.log(` --${change.toString()} cents`);
+  console.log('');
+  console.log('Denominations: ');
+
+  while (change > 0) {
+
+    change >= 25
+      ? (coins.quarters++,
+        (change -= 25))
+      : 
+      change >= 10 && change < 25
+      ? (coins.dimes++, (change -= 10) 
+      )
+      : 
+      change >= 5 && change < 10
+      ? (coins.nickels++,
+        (change -= 5)
+        )
+      : 
+      change >= 1 && change < 5
+      ? (coins.pennies++,
+        (change -= 1)
+        )
+      : null;
   }
 
-  while (change >= 10) {
-    change -= 10;
-    dime++;
-  }
-
-  while (change >= 5) {
-    change -= 5;
-    nickel++;
-  }
-
-  while (change >= 1) {
-    change -= 1;
-    penny++;
-  }
-
-  console.log (`
-    ${quarter} quarters, 
-    ${dime} dimes, 
-    ${nickel} nickels, 
-    ${penny} pennies
-    `)
-}
-
-// prints total change
-console.log(`Total Change: ${Math.floor((payment - cost) / 100)}`)
-
-
-// narrow cost to a number
-if (cost == null) {
-  console.error('--item-cost is required but not provided. Exiting.')
-  process.exit(1)
-}
-
-if (payment == null) {
-  console.error('--payment is required but not provided. Exiting.')
-  process.exit(2)
-}
+  // returns the amount of each coin dispensed
+  console.log(` --Quarters: ${coins.quarters.toString()}`);
+  console.log(` --Dimes: ${coins.dimes.toString()}`);
+  console.log(` --Nickels: ${coins.nickels.toString()}`);
+  console.log(` --Pennies: ${coins.pennies.toString()}`);
+  return ''; 
+};
+console.log(vendingMachine(itemCost, payment));
