@@ -1,13 +1,11 @@
 const process = require('process');
 
 // console.log(process.argv)
-
 let arg = null
 let cost = null
 let payment = null
 
 // provides cost and payment
-
 while((arg = process.argv.shift()) != null) {
   if(arg === '--item-cost') {
     const costInput = process.argv.shift()
@@ -57,8 +55,11 @@ if (payment !== null && cost !== null) {
     `)
 }
 
-// narrow cost to a number
+// prints total change
+console.log(`Total Change: ${Math.floor((payment - cost) / 100)}`)
 
+
+// narrow cost to a number
 if (cost == null) {
   console.error('--item-cost is required but not provided. Exiting.')
   process.exit(1)

@@ -1,0 +1,33 @@
+[
+  {
+    "abbreviation": "USD",
+    "format": "$<AMOUNT>",
+    "divider": 100,
+    "coins": [
+      {
+        "name": "Quarter",
+        "value": 25
+      },
+      {
+        "name": "Dime",
+        "value": 10
+      },
+      {
+        "name": "Nickel",
+        "value": 5
+      },
+      {
+        "name": "Penny",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "abbreviation": "EUR",
+    "format": "<AMOUNT>€",
+    "divider": 100,
+    "coins"
+  }
+
+
+]
