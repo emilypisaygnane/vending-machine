@@ -1,3 +1,3 @@
-## How to run in terminal 
+# How to run in terminal
 
- // > node index.js --item-cost {cost in $ whole numbers} --payment {cost in $ whole numbers}
+ // > node index.js --item-cost {cost in $ whole numbers} --payment {cost in $ whole numbers} -- {"USD" or "CAD"}
